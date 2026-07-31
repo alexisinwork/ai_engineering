@@ -1,5 +1,5 @@
-[submodule "Scrimba"]
-	path = Scrimba
+[submodule "AskGenie"]
+	path = AskGenie
 	url = https://github.com/alexisinwork/openAPI_ask_jinny.git
 [submodule "PollyGlot"]
 	path = PollyGlot

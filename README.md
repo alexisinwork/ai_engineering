@@ -7,7 +7,7 @@ repos and are tracked here as submodules.
 
 | Project | Description | Repo |
 | --- | --- | --- |
-| [Scrimba](Scrimba) | Scrimba AI Engineer path — OpenAI client, Gift Genie | [openAPI_ask_jinny](https://github.com/alexisinwork/openAPI_ask_jinny) |
+| [AskGenie](AskGenie) | Gift Genie — AI gift suggestions with web search | [openAPI_ask_jinny](https://github.com/alexisinwork/openAPI_ask_jinny) |
 | [PollyGlot](PollyGlot) | Chat translator — French, Spanish, Japanese, plus AI illustrations | [PollyGlot](https://github.com/alexisinwork/PollyGlot) |
 
 ## Cloning

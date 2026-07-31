@@ -1,0 +1,3 @@
+[submodule "Scrimba"]
+	path = Scrimba
+	url = https://github.com/alexisinwork/openAPI_ask_jinny.git

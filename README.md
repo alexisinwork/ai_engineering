@@ -1,0 +1,34 @@
+# AI Engineering
+
+Umbrella repo for my AI engineering work. Individual projects live in their own
+repos and are tracked here as submodules.
+
+## Projects
+
+| Project | Description | Repo |
+| --- | --- | --- |
+| [Scrimba](Scrimba) | Scrimba AI Engineer path — OpenAI client, Gift Genie | [openAPI_ask_jinny](https://github.com/alexisinwork/openAPI_ask_jinny) |
+
+## Cloning
+
+Submodules are not fetched by default:
+
+```bash
+git clone --recurse-submodules https://github.com/alexisinwork/ai_engineering.git
+```
+
+If you already cloned without it:
+
+```bash
+git submodule update --init --recursive
+```
+
+## Updating a submodule pointer
+
+After committing and pushing inside a project, record the new commit here:
+
+```bash
+git add <project>
+git commit -m "Bump <project> to latest"
+git push
+```

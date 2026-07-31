@@ -4,3 +4,6 @@
 [submodule "PollyGlot"]
 	path = PollyGlot
 	url = https://github.com/alexisinwork/PollyGlot.git
+[submodule "DreamCatcher"]
+	path = DreamCatcher
+	url = https://github.com/alexisinwork/dreamcatcher.git

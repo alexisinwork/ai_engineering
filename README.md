@@ -9,6 +9,7 @@ repos and are tracked here as submodules.
 | --- | --- | --- |
 | [AskGenie](AskGenie) | Gift Genie — AI gift suggestions with web search | [openAPI_ask_jinny](https://github.com/alexisinwork/openAPI_ask_jinny) |
 | [PollyGlot](PollyGlot) | Chat translator — French, Spanish, Japanese, plus AI illustrations | [PollyGlot](https://github.com/alexisinwork/PollyGlot) |
+| [DreamCatcher](DreamCatcher) | Dream journal with AI interpretations, stored in SQLite | [dreamcatcher](https://github.com/alexisinwork/dreamcatcher) |
 
 ## Cloning
 

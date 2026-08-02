@@ -10,3 +10,9 @@
 [submodule "HuggingFaceDemo"]
 	path = HuggingFaceDemo
 	url = https://github.com/alexisinwork/hf_demo_BART.git
+[submodule "TransformersJs"]
+	path = TransformersJs
+	url = https://github.com/alexisinwork/TransformrsJS.git
+[submodule "EmbeddingsAndVectorDB"]
+	path = EmbeddingsAndVectorDB
+	url = https://github.com/alexisinwork/embeds-vectors.git

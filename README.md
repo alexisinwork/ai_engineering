@@ -10,7 +10,15 @@ repos and are tracked here as submodules.
 | [AskGenie](AskGenie) | Gift Genie — AI gift suggestions with web search | [openAPI_ask_jinny](https://github.com/alexisinwork/openAPI_ask_jinny) |
 | [PollyGlot](PollyGlot) | Chat translator — French, Spanish, Japanese, plus AI illustrations | [PollyGlot](https://github.com/alexisinwork/PollyGlot) |
 | [DreamCatcher](DreamCatcher) | Dream journal with AI interpretations — a small app used to practice deploying AI apps, on Render | [dreamcatcher](https://github.com/alexisinwork/dreamcatcher) |
-| [HuggingFaceDemo](HuggingFaceDemo) | Hugging Face Inference API demo — work in progress | [hf_demo_BART](https://github.com/alexisinwork/hf_demo_BART) |
+| [HuggingFaceDemo](HuggingFaceDemo) | Hugging Face Inference API — chat completion, text-to-image and summarization over an Express server | [hf_demo_BART](https://github.com/alexisinwork/hf_demo_BART) |
+| [TransformersJs](TransformersJs) | Transformers.js object detection — runs the model in the browser, no API token | [TransformrsJS](https://github.com/alexisinwork/TransformrsJS) |
+| [EmbeddingsAndVectorDB](EmbeddingsAndVectorDB) | Embeddings and vector database practice | [embeds-vectors](https://github.com/alexisinwork/embeds-vectors) |
+
+Not yet a submodule:
+
+| Project | Description |
+| --- | --- |
+| `OllamaPracticeMistral` | Express server querying a local Mistral through Ollama — local only, no remote repo yet |
 
 ## Cloning
 

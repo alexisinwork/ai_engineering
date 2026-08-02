@@ -7,3 +7,6 @@
 [submodule "DreamCatcher"]
 	path = DreamCatcher
 	url = https://github.com/alexisinwork/dreamcatcher.git
+[submodule "HuggingFaceDemo"]
+	path = HuggingFaceDemo
+	url = https://github.com/alexisinwork/hf_demo_BART.git

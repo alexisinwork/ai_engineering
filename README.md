@@ -13,12 +13,10 @@ repos and are tracked here as submodules.
 | [HuggingFaceDemo](HuggingFaceDemo) | Hugging Face Inference API — chat completion, text-to-image and summarization over an Express server | [hf_demo_BART](https://github.com/alexisinwork/hf_demo_BART) |
 | [TransformersJs](TransformersJs) | Transformers.js object detection — runs the model in the browser, no API token | [TransformrsJS](https://github.com/alexisinwork/TransformrsJS) |
 | [EmbeddingsAndVectorDB](EmbeddingsAndVectorDB) | Embeddings and vector database practice | [embeds-vectors](https://github.com/alexisinwork/embeds-vectors) |
+| [OllamaPracticeMistral](OllamaPracticeMistral) | Express server querying a local Mistral through Ollama | in this repo |
 
-Not yet a submodule:
-
-| Project | Description |
-| --- | --- |
-| `OllamaPracticeMistral` | Express server querying a local Mistral through Ollama — local only, no remote repo yet |
+`OllamaPracticeMistral` is small enough that it lives directly in this repo
+rather than in its own — no submodule, nothing to clone separately.
 
 ## Cloning
 

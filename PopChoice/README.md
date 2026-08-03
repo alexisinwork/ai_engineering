@@ -169,19 +169,63 @@ order is right.
 | section | what it checks | cost |
 |---|---|---|
 | TIME | the free-text time box, including unparseable ≠ unlimited | free |
-| FUSION | `rank.js` against hand-built rankings | free |
-| CONSTRAINTS | the time filter, including the case where it gives way | embeddings |
+| LEAKAGE | no profile names its target film or where it is from | free |
+| FUSION | `rank.js` against hand-built rankings, **whole order** asserted | free |
+| CONSTRAINTS | the time filter, asserted against what the database returned | embeddings |
 | PROFILES | one person's taste → the film that should come first | embeddings |
-| GROUP | several people → the compromise that should come first | embeddings |
+| GROUP | several people → the compromise, fusion measured against naive | embeddings |
 
 The profiles are written the way the form is actually filled in — a favourite
-film and a reason, a mood, someone to be stranded with — and never name the
-target film or anything unique to its record. A profile saying "I loved Into the
-Spider-Verse" would retrieve *Across the Spider-Verse* on the title alone and
-prove nothing about whether taste matching works.
+film and a reason, a mood, someone to be stranded with. The group cases are
+built so the right answer is a *compromise*; a group that agrees tests nothing a
+single profile does not.
 
-The group cases are all built so the right answer is a *compromise*. A group
-that agrees does not test anything a single profile does not.
+### Leakage is enforced, not trusted
+
+A profile mentioning "water" retrieves *The Way of the Water* on the token
+alone. It scores a pass and proves nothing — it would still pass with the
+embeddings replaced by keyword search. Two of the original profiles leaked and
+neither was obvious on reading, so the check is now automatic and free:
+
+- **title words** — no profile may contain a word from its target's title
+- **origin labels** — "Norwegian", "Bollywood", "South Indian" each single out
+  exactly one film, and nobody offers a film's nationality when asked their
+  favourite film and why
+
+Plot description stays fair game; that is what a person actually types.
+
+Removing the leaks cost real accuracy: **18/18 became 15/18.** Three profiles
+were passing on the leaked token and now land second, each behind a film the
+corpus genuinely confuses them with — Oppenheimer behind another wartime drama,
+RRR behind the other Indian action epic. The temptation was to sharpen those
+three until they went green, which is tuning the measurement to the answer and
+is how the leak got in the first time. So the number is recorded as it is:
+
+```
+first      15/18   baseline; a regression guard, not an aspiration
+mean rank  1.17    degrades before accuracy does
+max rank   2       third or worse is a bug, not an ambiguity
+```
+
+### The premise is tested, not asserted
+
+`rank.js` exists on the claim that concatenating everyone's answers into one
+embedding fails. That claim lived in a comment, which made it an opinion with a
+citation — so GROUP now builds the naive version for real and measures it.
+
+On agreeable groups the two are **identical**. The difference only appears when
+tastes genuinely conflict, which is the case the section exists for:
+
+| | pick | per-person ranks | worst |
+|---|---|---|---|
+| fusion | The Fabelmans | 5, 3, 1 | **5** |
+| naive | Troll | 1, 6, 5 | **6** |
+
+Naive picks the horror fan's favourite, which is the animation fan's sixth of
+nine. Fusion picks something middling for everyone. That is the whole claim, and
+it is narrower than the comment implied — fusion is required only to be *no less
+fair* than the blob, and the eval fails if naive ever matches more expected
+titles than fusion does.
 
 ## Keys
 

@@ -1,0 +1,286 @@
+/*
+ * Colours read off the supplied design: a near-black navy field, muted
+ * blue-grey inputs that sit only slightly above it, and one saturated mint
+ * button carrying every call to action. The restraint is the design — a single
+ * accent colour used once per screen is what makes the button unmissable
+ * without any other emphasis.
+ */
+:root {
+  --bg: #0b1034;
+  --field: #3d4577;
+  --field-text: #c9cee8;
+  --text: #ffffff;
+  --muted: #a7addb;
+  --accent: #6fe39b;
+  --accent-ink: #08210f;
+  --radius: 8px;
+  --gap: 1.15rem;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+/*
+ * The design is drawn inside a phone, so the layout is a fixed narrow column
+ * rather than something that reflows to the viewport. On a desktop it sits
+ * centred with room around it; on a phone the max-width stops applying and the
+ * padding carries it.
+ */
+.phone {
+  width: min(100%, 24rem);
+  padding: 2.5rem 1.5rem 3rem;
+}
+
+.screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+.screen[hidden] {
+  display: none;
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 0.5rem;
+}
+
+.brand--compact {
+  gap: 0.1rem;
+}
+
+.popcorn {
+  font-size: 3.5rem;
+  line-height: 1;
+}
+
+.brand h1 {
+  margin: 0;
+  font-size: 2.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  /* The wordmark in the design is a soft rounded script; Georgia italic is the
+     nearest thing available without shipping a font file. */
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+}
+
+.counter {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+legend {
+  padding: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.35;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 0.7rem 0.8rem;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--field);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  resize: vertical;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--field-text);
+  opacity: 0.85;
+}
+
+input:focus-visible,
+textarea:focus-visible,
+.chip:focus-visible,
+.cta:focus-visible,
+.restart:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.chip {
+  padding: 0.3rem 0.75rem;
+  border: 0;
+  border-radius: 5px;
+  background: var(--field);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+/* Selection has to be obvious at a glance, so it borrows the accent rather than
+   relying on a subtle shade change against an already-dark field. */
+.chip[aria-pressed="true"] {
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 700;
+}
+
+.cta {
+  margin-top: 0.6rem;
+  padding: 0.85rem;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.cta[disabled] {
+  opacity: 0.55;
+  cursor: progress;
+}
+
+.restart {
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.8rem;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0.25rem;
+}
+
+.film-title {
+  margin: 0;
+  text-align: center;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.3rem;
+}
+
+.poster-frame {
+  position: relative;
+  aspect-ratio: 2 / 3;
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--field);
+}
+
+.poster-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/*
+ * Shown when a poster URL fails. The images are third-party and the host owes
+ * us nothing, so the layout must survive losing them — a broken-image icon in
+ * a 2:3 box is worse than no image at all.
+ */
+.poster-fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 1rem;
+  text-align: center;
+  background: linear-gradient(150deg, #2a3168, #4a3f7d 55%, #1d2350);
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.poster-fallback[hidden] {
+  display: none;
+}
+
+#fallback-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+#fallback-year {
+  color: var(--muted);
+}
+
+.pitch {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.note[hidden],
+.field-error[hidden] {
+  display: none;
+}
+
+.field-error {
+  margin: 0;
+  color: #ffb4b4;
+  font-size: 0.82rem;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}

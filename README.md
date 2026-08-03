@@ -3,7 +3,7 @@
 Umbrella repo for my AI engineering work. Individual projects live in their own
 repos and are tracked here as submodules.
 
-Every project carries a `THEORY.md` explaining the concepts it implements —
+Most projects carry a `THEORY.md` explaining the concepts they implement —
 inference providers and model architectures, tool use and streaming, reasoning
 tokens and prompt injection, on-device inference, embeddings and retrieval, and
 how local models compare to hosted APIs. They cross-reference each other, so
@@ -18,11 +18,19 @@ any one of them is a reasonable place to start.
 | [DreamCatcher](DreamCatcher) | Dream journal with AI interpretations — a small app used to practice deploying AI apps, on Render | [dreamcatcher](https://github.com/alexisinwork/dreamcatcher) |
 | [HuggingFaceDemo](HuggingFaceDemo) | Hugging Face Inference API — chat completion, text-to-image and summarization over an Express server | [hf_demo_BART](https://github.com/alexisinwork/hf_demo_BART) |
 | [TransformersJs](TransformersJs) | Transformers.js object detection — runs the model in the browser, no API token | [TransformrsJS](https://github.com/alexisinwork/TransformrsJS) |
-| [EmbeddingsAndVectorDB](EmbeddingsAndVectorDB) | Embeddings and vector database practice | [embeds-vectors](https://github.com/alexisinwork/embeds-vectors) |
+| [EmbeddingsAndVectorDB](EmbeddingsAndVectorDB) | Semantic search and RAG chat over two corpora — routing, calibration, and a relevance gate | [embeds-vectors](https://github.com/alexisinwork/embeds-vectors) |
+| [PopChoice](PopChoice) | Group film recommender — everyone answers four questions, rank fusion picks one film | in this repo |
 | [OllamaPracticeMistral](OllamaPracticeMistral) | Express server querying a local Mistral through Ollama | in this repo |
 
-`OllamaPracticeMistral` is small enough that it lives directly in this repo
-rather than in its own — no submodule, nothing to clone separately.
+`PopChoice` and `OllamaPracticeMistral` live directly in this repo rather than
+in their own — no submodule, nothing to clone separately.
+
+`PopChoice` shares a Supabase project with `EmbeddingsAndVectorDB`, adding its
+own table and match function rather than a second database. The two are
+otherwise independent, and the pair is worth reading together: one has to be
+able to refuse and so is built around a calibrated threshold, while the other
+always recommends and so is built around ranking. The same vector store, two
+different questions, two different shapes of eval.
 
 ## Cloning
 

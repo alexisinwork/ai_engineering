@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PopChoice</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍿</text></svg>" />
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <main class="phone">
+      <!--
+        Three screens, one document. Each <section> is shown on its own; the
+        alternative — three HTML files — would throw away the answers on every
+        navigation, and the answers are the entire input to the recommendation.
+      -->
+
+      <section id="screen-setup" class="screen">
+        <header class="brand">
+          <span class="popcorn" aria-hidden="true">🍿</span>
+          <h1>PopChoice</h1>
+        </header>
+
+        <form id="setup-form" novalidate>
+          <label class="sr-only" for="people">How many people?</label>
+          <input id="people" name="people" type="number" min="1" max="8" step="1"
+                 inputmode="numeric" placeholder="How many people?" required />
+
+          <label class="sr-only" for="minutes">How much time do you have?</label>
+          <input id="minutes" name="minutes" type="text"
+                 placeholder="How much time do you have?" />
+
+          <p class="field-error" id="setup-error" role="alert" hidden></p>
+
+          <button class="cta" type="submit">Start</button>
+        </form>
+      </section>
+
+      <section id="screen-person" class="screen" hidden>
+        <header class="brand brand--compact">
+          <span class="popcorn" aria-hidden="true">🍿</span>
+          <p class="counter" id="person-counter" aria-live="polite">1</p>
+        </header>
+
+        <form id="person-form" novalidate>
+          <fieldset>
+            <legend>What's your favorite movie and why?</legend>
+            <label class="sr-only" for="favourite">What's your favorite movie and why?</label>
+            <textarea id="favourite" name="favourite" rows="3"
+                      placeholder="The Shawshank Redemption&#10;Because it taught me to never give up hope no matter how hard life gets"></textarea>
+          </fieldset>
+
+          <fieldset>
+            <legend>Are you in the mood for something new or a classic?</legend>
+            <div class="choices" id="era-choices" role="radiogroup" aria-label="New or classic">
+              <button type="button" class="chip" data-group="era" data-value="new">New</button>
+              <button type="button" class="chip" data-group="era" data-value="classic">Classic</button>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>What are you in the mood for?</legend>
+            <div class="choices" id="mood-choices" role="radiogroup" aria-label="Mood">
+              <button type="button" class="chip" data-group="mood" data-value="Fun">Fun</button>
+              <button type="button" class="chip" data-group="mood" data-value="Serious">Serious</button>
+              <button type="button" class="chip" data-group="mood" data-value="Inspiring">Inspiring</button>
+              <button type="button" class="chip" data-group="mood" data-value="Scary">Scary</button>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Which famous film person would you love to be stranded on an island with and why?</legend>
+            <label class="sr-only" for="stranded">Which famous film person would you love to be stranded on an island with and why?</label>
+            <textarea id="stranded" name="stranded" rows="3"
+                      placeholder="Tom Hanks because he is really funny and can do the voice of Woody"></textarea>
+          </fieldset>
+
+          <p class="field-error" id="person-error" role="alert" hidden></p>
+
+          <button class="cta" type="submit" id="person-submit">Next Person</button>
+        </form>
+      </section>
+
+      <section id="screen-result" class="screen" hidden>
+        <h2 class="film-title" id="film-title"></h2>
+        <div class="poster-frame">
+          <img id="film-poster" alt="" />
+          <div class="poster-fallback" id="poster-fallback" hidden>
+            <span id="fallback-title"></span>
+            <span id="fallback-year"></span>
+          </div>
+        </div>
+        <p class="note" id="result-note" hidden></p>
+        <p class="pitch" id="film-pitch" aria-live="polite"></p>
+        <button class="cta" type="button" id="next-movie">Next Movie</button>
+        <button class="restart" type="button" id="start-over">Start over</button>
+      </section>
+    </main>
+
+    <script type="module" src="index.js"></script>
+  </body>
+</html>

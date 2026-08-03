@@ -3,11 +3,12 @@
 Umbrella repo for my AI engineering work. Individual projects live in their own
 repos and are tracked here as submodules.
 
-Most projects carry a `THEORY.md` explaining the concepts they implement —
+Every project carries a `THEORY.md` explaining the concepts it implements —
 inference providers and model architectures, tool use and streaming, reasoning
-tokens and prompt injection, on-device inference, embeddings and retrieval, and
-how local models compare to hosted APIs. They cross-reference each other, so
-any one of them is a reasonable place to start.
+tokens and prompt injection, on-device inference, embeddings and retrieval,
+rank fusion and group recommendation, and how local models compare to hosted
+APIs. They cross-reference each other, so any one of them is a reasonable place
+to start.
 
 ## Projects
 

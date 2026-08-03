@@ -6,6 +6,12 @@ picks something they can all live with.
 Part of [ai_engineering](https://github.com/alexisinwork/ai_engineering). Built
 after `../EmbeddingsAndVectorDB`, and leans on what that project cost to learn.
 
+`THEORY.md` covers the concepts: why a recommender needs no threshold when a
+question-answering system lives on one, which signals belong in a vector and
+which in a `WHERE` clause, group choice as a voting problem and what Arrow's
+theorem means for a "Next Movie" button, rank fusion versus averaging
+embeddings, and how to evaluate a recommender without fooling yourself.
+
 Film records are embedded with OpenAI `text-embedding-3-small` (1536 dims) and
 stored in Supabase Postgres via `pgvector`. Each person's answers are embedded
 separately and searched separately; the rankings are then fused into one.

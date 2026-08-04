@@ -16,3 +16,6 @@
 [submodule "EmbeddingsAndVectorDB"]
 	path = EmbeddingsAndVectorDB
 	url = https://github.com/alexisinwork/embeds-vectors.git
+[submodule "AI_Agents"]
+	path = AI_Agents
+	url = https://github.com/alexisinwork/ai_agents.git

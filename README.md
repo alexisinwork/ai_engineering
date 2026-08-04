@@ -22,6 +22,7 @@ to start.
 | [EmbeddingsAndVectorDB](EmbeddingsAndVectorDB) | Semantic search and RAG chat over two corpora — routing, calibration, and a relevance gate | [embeds-vectors](https://github.com/alexisinwork/embeds-vectors) |
 | [PopChoice](PopChoice) | Group film recommender — everyone answers four questions, rank fusion picks one film | in this repo |
 | [OllamaPracticeMistral](OllamaPracticeMistral) | Express server querying a local Mistral through Ollama | in this repo |
+| [AI_Agents](AI_Agents) | AI agents practice — weather lookup and localized activity suggestions | [ai_agents](https://github.com/alexisinwork/ai_agents) |
 
 `PopChoice` and `OllamaPracticeMistral` live directly in this repo rather than
 in their own — no submodule, nothing to clone separately.

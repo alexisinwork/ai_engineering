@@ -19,3 +19,6 @@
 [submodule "AI_Agents"]
 	path = AI_Agents
 	url = https://github.com/alexisinwork/ai_agents.git
+[submodule "Context_Engineering"]
+	path = Context_Engineering
+	url = https://github.com/alexisinwork/ContextEngineering.git

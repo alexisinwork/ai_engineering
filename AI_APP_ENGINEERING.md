@@ -35,6 +35,10 @@ AI pipelines have no such courtesy:
 | Prompt names a tool that isn't registered | `NoSuchTool` | the rule degrades to a suggestion, silently |
 | Step budget exhausted | error | empty final answer |
 | Sanitizer dependency missing | error | renders unsanitized |
+| `console.log` in a stdio MCP server | log line appears | protocol stream corrupts; client disconnects citing no line of your code |
+| MCP tool throws instead of `isError` | model retries | model never sees it; run ends |
+| Tool annotated `readOnlyHint` but writes | — | host skips the confirmation prompt it should have shown |
+| Resource template without `list`/`complete` | — | resource works, but nobody can discover its URI |
 
 **Every row above passes code review.** The code is correct in each case; the
 *number* or the *path* is wrong. This is why AI work needs a different
@@ -553,7 +557,81 @@ generate a summary") converts a tunable bug into a permanent one. Budget for
 
 ---
 
-## 11. Checklist before calling an AI pipeline done
+## 11. Exposing tools over MCP
+
+MCP standardises the seam between a tool provider and a tool consumer. It adds
+no capability — it removes an N×M problem, so a tool is written once instead of
+once per host. **No model speaks MCP**: the host lists tools over the protocol,
+translates them into its provider's format, and translates the call back. That
+adapter is usually four lines, because `inputSchema` is already JSON Schema.
+
+### The primitive split is about who decides
+
+| Primitive | Decided by | Reach for it when |
+| --- | --- | --- |
+| **Resource** | the application | it should be in context whether or not the model asks |
+| **Tool** | the model | it should be loaded only when relevant, or it has side effects |
+| **Prompt** | the user | it is a workflow someone repeats |
+
+The question is never "is this data or an action?" — all three can return the
+same bytes. It is **"who should decide whether this enters the context?"**
+Exposing a document set as a tool means the model must *choose* to search it,
+and when it doesn't, you get a confident ungrounded answer with no tool call in
+the trace to explain why.
+
+### Rules that are invisible until they bite
+
+**On stdio, stdout is the protocol.** One `console.log` corrupts the stream and
+the client disconnects with a parse error naming no line of your code. Every
+diagnostic goes to stderr — including any your dependencies emit. Over HTTP the
+rule does not apply, which is one reason remote is the default recommendation
+for anything not required to be local.
+
+**Tool errors must not be thrown.** Two channels, not interchangeable:
+
+| | Throw | `isError: true` |
+| --- | --- | --- |
+| Who sees it | the host | the **model** |
+| Recoverable | no | yes |
+| Means | *the server is broken* | *your call was wrong* |
+
+Protocol errors are for your bugs; `isError` is for the caller's mistakes. A
+thrown "no such id" ends the run without the model ever learning why.
+
+**Annotations are host hints, and each is a separate claim.** `readOnlyHint`,
+`destructiveHint`, `idempotentHint`, `openWorldHint` do not change behaviour —
+they decide whether the host prompts for confirmation and whether a retry after
+a timeout is safe. A write tool marked read-only silently skips its approval
+dialog, and no return value reveals it. **Assert annotations in a test**; it is
+the only place the mistake is visible.
+
+**Empty results must say so** — the §10 rule, unchanged. A tool returning a bare
+`[]` cannot be distinguished from a tool that failed to run.
+
+**A resource template without `list` and `complete`** works perfectly for anyone
+who already knows the URI, which is nobody.
+
+### Testing a server
+
+Two tools answering different questions. The **MCP Inspector**
+(`npx @modelcontextprotocol/inspector node server.js`, plus a `--cli` mode for
+scripts) is for looking — schemas, annotations, resource expansion, stderr. It
+cannot notice; it shows one call at a time and relies on you reading carefully.
+
+A **programmatic client** is for knowing: spawn the server over its real
+transport with the SDK's own `Client` and assert. Not a mock — the same
+transport, schemas, and handlers a host uses. It needs no API key and no model,
+so it costs nothing and runs in a second. Assert the things ordinary use never
+exercises: annotations, `structuredContent` against `outputSchema`, the empty
+case, and `isError` on bad input.
+
+**A correct server and a correct agent are two separate claims.** A server test
+says nothing about whether the model picks the right tool — that is the §10
+eval, over labelled messages, scoring tool choice against a baseline.
+
+---
+
+## 12. Checklist before calling an AI pipeline done
 
 **The gate:** can you state a quality score, end to end, against labelled data,
 next to its random baseline? If not, the remaining boxes do not matter — you
@@ -585,6 +663,15 @@ If retrieval is a tool rather than a stage (§10):
 - [ ] Provenance reporting handles the case where two tools ran
 - [ ] Which half of the tool catalogue is provider-locked is written down
 
+If the tools are exposed over MCP (§11):
+
+- [ ] Nothing writes to stdout on a stdio server — dependencies included
+- [ ] Caller mistakes return `isError`; only real bugs throw
+- [ ] Annotations set on every tool, and **asserted in a test**
+- [ ] Resource templates declare `list` and `complete`, or the URI is undiscoverable
+- [ ] A programmatic client test runs the real transport, not a mock
+- [ ] Chose resource vs tool by *who decides*, not by data vs action
+
 ---
 
 ## Reference implementations in this repo
@@ -594,6 +681,9 @@ If retrieval is a tool rather than a stage (§10):
 | Calibration, eval structure, router assertions | `EmbeddingsAndVectorDB/eval.js` |
 | Single source of truth per corpus; chunk windows | `EmbeddingsAndVectorDB/corpora.js` |
 | Chunking decisions | `EmbeddingsAndVectorDB/chunk.js` |
+| MCP server: all three primitives, annotations | `ModelContextProtocol/server.js` |
+| MCP protocol-level test, Inspector usage | `ModelContextProtocol/test.js`, its `README.md` |
+| MCP host: tool loop and the four-line adapter | `ModelContextProtocol/client.js` |
 | Relevance gate, fail-open | `EmbeddingsAndVectorDB/relevance.js` |
 | Query condensation and its failure modes | `EmbeddingsAndVectorDB/condense.js` |
 | Rank fusion, purity for testability | `PopChoice/rank.js` |

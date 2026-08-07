@@ -15,6 +15,36 @@ trustworthy.
 
 ---
 
+## How to read this — epistemic status
+
+This document is written to be read by an agent that already knows the general
+theory. It therefore carries three kinds of claim, and **conflating them is how
+a reference like this starts causing errors instead of preventing them**:
+
+| Label | Means | How to use it |
+| --- | --- | --- |
+| **MEASURED** | A number from one corpus in this repo, with the method that produced it | Copy the *method*. **Never copy the number** — it is a property of that data, not a default |
+| **METHOD** | A procedure that transfers unchanged | Apply directly |
+| **VERIFIED-AT** | True of a specific library version on a specific date | Re-check against the installed version before relying on it |
+
+Two rules that follow:
+
+**No number here is a default.** `0.68`, `chunkSize: 700`, `MATCH_THRESHOLD =
+0.5` are measurements from named corpora. Reusing one as a starting value is
+precisely the mistake §1 exists to prevent. If you find yourself reaching for a
+figure from this document, you are using it wrong.
+
+**This file deliberately does not re-explain general theory** — what an
+embedding is, how attention degrades over long contexts, what MCP primitives
+are. That knowledge is already in the model. Restating it here would add tokens
+without adding information, and a slightly-off paraphrase sitting in context can
+override a correct understanding. Where general background is needed, the
+`THEORY.md` files in this repo carry it against a real corpus, and existing
+skills carry the rest — for MCP mechanics specifically, use
+`mcp-server-dev:build-mcp-server` rather than this document's §11.
+
+---
+
 ## 0. The premise: AI code fails plausibly
 
 Ordinary software fails loudly. A null dereference raises. A type error won't
@@ -70,7 +100,7 @@ The three worst offenders, in order of how often they are wrong:
 2. **Chunk size.** Copied from a blog. See §3.
 3. **top-k.** Rarely examined; interacts with the threshold.
 
-### Calibration: the floor and the ceiling
+### Calibration: the floor and the ceiling  *(METHOD)*
 
 A threshold is a claim about two distributions:
 
@@ -91,7 +121,7 @@ distributions overlap, which means retrieval itself is broken — usually
 chunking (§3). Picking a number inside the overlap guarantees both false
 positives and false negatives, permanently.
 
-### Calibration is a command, not a measurement
+### Calibration is a command, not a measurement  *(METHOD)*
 
 Re-runnable, ideally wired to ingest (`postingest`) and to CI.
 
@@ -112,7 +142,8 @@ A threshold is a property of the *documents* as much as of the model. Longer
 records score lower against a short query, because more of the vector is spent
 on material the query never mentions.
 
-Worked example from `EmbeddingsAndVectorDB`:
+**MEASURED** — from `EmbeddingsAndVectorDB`. The windows are the point; the
+chosen sizes are properties of these two corpora and transfer to nothing:
 
 | Corpus | Record length | Chunk size |
 | --- | --- | --- |
@@ -132,7 +163,7 @@ downstream is generic over that entry. See `corpora.js`.
 
 ## 3. Chunking decides retrieval quality before retrieval runs
 
-Chunk size has to clear two bars simultaneously, and splitters that *merge*
+**METHOD.** Chunk size has to clear two bars simultaneously, and splitters that *merge*
 adjacent pieces while they fit make both bars real:
 
 ```
@@ -155,7 +186,7 @@ strands fragments.
 Embedding many topics into one vector puts that vector near the centroid of the
 space — close to everything, specific to nothing.
 
-From this repo, same document, same model, same query:
+**MEASURED** — same model and query, one corpus. Read the *ratio*, not the values:
 
 | Setup | Best similarity |
 | --- | --- |
@@ -559,77 +590,53 @@ generate a summary") converts a tunable bug into a permanent one. Budget for
 
 ## 11. Exposing tools over MCP
 
-MCP standardises the seam between a tool provider and a tool consumer. It adds
-no capability — it removes an N×M problem, so a tool is written once instead of
-once per host. **No model speaks MCP**: the host lists tools over the protocol,
-translates them into its provider's format, and translates the call back. That
-adapter is usually four lines, because `inputSchema` is already JSON Schema.
+**Use `mcp-server-dev:build-mcp-server` for the mechanics** — primitives,
+annotation semantics, transports, Inspector usage, deployment models. It covers
+those well and this section does not repeat them.
 
-### The primitive split is about who decides
+What that guidance does not carry, and what cost real debugging time here:
 
-| Primitive | Decided by | Reach for it when |
-| --- | --- | --- |
-| **Resource** | the application | it should be in context whether or not the model asks |
-| **Tool** | the model | it should be loaded only when relevant, or it has side effects |
-| **Prompt** | the user | it is a workflow someone repeats |
+**1. `stdout` is the protocol on stdio.** One `console.log` — yours or a
+dependency's — corrupts the stream, and the client disconnects with a parse
+error naming no line of your code. Every diagnostic goes to stderr. Over HTTP
+the rule does not apply, which is one reason remote is the default for anything
+not required to be local.
 
-The question is never "is this data or an action?" — all three can return the
-same bytes. It is **"who should decide whether this enters the context?"**
-Exposing a document set as a tool means the model must *choose* to search it,
-and when it doesn't, you get a confident ungrounded answer with no tool call in
-the trace to explain why.
+**2. Assert annotations in a test.** `readOnlyHint`, `destructiveHint`,
+`idempotentHint` change host behaviour — whether it prompts for confirmation,
+whether a retry after a timeout is safe — and **no return value reveals them**.
+A write tool marked read-only silently skips its approval dialog. A test that
+reads the flags back is the only place that mistake is visible.
 
-### Rules that are invisible until they bite
+**3. Test with a programmatic client, not only the Inspector.** Spawn the server
+over its real transport with the SDK's own `Client` and assert. Not a mock — the
+same transport, schemas, and handlers a host uses, with no API key and no model,
+so it runs in a second. The Inspector is for looking; it shows one call at a
+time and relies on you noticing. Assert what ordinary use never exercises:
+annotations, `structuredContent` against `outputSchema`, the empty case, and
+`isError` on bad input.
 
-**On stdio, stdout is the protocol.** One `console.log` corrupts the stream and
-the client disconnects with a parse error naming no line of your code. Every
-diagnostic goes to stderr — including any your dependencies emit. Over HTTP the
-rule does not apply, which is one reason remote is the default recommendation
-for anything not required to be local.
+**Two framings worth keeping**, because they decide designs rather than describe
+APIs:
 
-**Tool errors must not be thrown.** Two channels, not interchangeable:
+- **Resource vs tool is a question about who decides**, not data versus action —
+  all three primitives can return the same bytes. Resource = the application
+  loads it whether or not the model asks. Tool = the model chooses, and when it
+  doesn't choose you get a confident ungrounded answer with no tool call in the
+  trace to explain why.
+- **Errors have two channels and they are not interchangeable.** A throw is a
+  protocol error the host sees and the model does not, so the run ends with no
+  chance to recover. `isError: true` puts the text in front of the model, which
+  reads it and retries. Protocol errors are for your bugs; `isError` is for the
+  caller's mistakes.
 
-| | Throw | `isError: true` |
-| --- | --- | --- |
-| Who sees it | the host | the **model** |
-| Recoverable | no | yes |
-| Means | *the server is broken* | *your call was wrong* |
+**VERIFIED-AT** — SDK `1.30.0`, 2026-08-07: schema violations are returned as
+`isError` results, not thrown. That was contrary to expectation and is the
+better design, but re-check it against the installed version rather than relying
+on this line. A correct server and a correct agent remain separate claims.
 
-Protocol errors are for your bugs; `isError` is for the caller's mistakes. A
-thrown "no such id" ends the run without the model ever learning why.
-
-**Annotations are host hints, and each is a separate claim.** `readOnlyHint`,
-`destructiveHint`, `idempotentHint`, `openWorldHint` do not change behaviour —
-they decide whether the host prompts for confirmation and whether a retry after
-a timeout is safe. A write tool marked read-only silently skips its approval
-dialog, and no return value reveals it. **Assert annotations in a test**; it is
-the only place the mistake is visible.
-
-**Empty results must say so** — the §10 rule, unchanged. A tool returning a bare
-`[]` cannot be distinguished from a tool that failed to run.
-
-**A resource template without `list` and `complete`** works perfectly for anyone
-who already knows the URI, which is nobody.
-
-### Testing a server
-
-Two tools answering different questions. The **MCP Inspector**
-(`npx @modelcontextprotocol/inspector node server.js`, plus a `--cli` mode for
-scripts) is for looking — schemas, annotations, resource expansion, stderr. It
-cannot notice; it shows one call at a time and relies on you reading carefully.
-
-A **programmatic client** is for knowing: spawn the server over its real
-transport with the SDK's own `Client` and assert. Not a mock — the same
-transport, schemas, and handlers a host uses. It needs no API key and no model,
-so it costs nothing and runs in a second. Assert the things ordinary use never
-exercises: annotations, `structuredContent` against `outputSchema`, the empty
-case, and `isError` on bad input.
-
-**A correct server and a correct agent are two separate claims.** A server test
-says nothing about whether the model picks the right tool — that is the §10
-eval, over labelled messages, scoring tool choice against a baseline.
-
----
+Worked implementation: `ModelContextProtocol/` — server, host, and a 27-assertion
+protocol test. Its `THEORY.md` carries the full reasoning.
 
 ## 12. Checklist before calling an AI pipeline done
 

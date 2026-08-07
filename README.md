@@ -10,6 +10,12 @@ rank fusion and group recommendation, and how local models compare to hosted
 APIs. They cross-reference each other, so any one of them is a reasonable place
 to start.
 
+[`AI_APP_ENGINEERING.md`](AI_APP_ENGINEERING.md) is the cross-cutting one: the
+discipline these projects share, distilled to be portable to any AI codebase —
+why AI pipelines fail plausibly rather than loudly, calibrating a threshold
+instead of guessing it, deriving chunk size from the data, and what separates
+an eval you can trust from one that flatters you.
+
 ## Projects
 
 | Project | Description | Repo |
@@ -25,6 +31,7 @@ to start.
 | [AI_Agents](AI_Agents) | AI agents practice — weather lookup and localized activity suggestions | [ai_agents](https://github.com/alexisinwork/ai_agents) |
 | [Context_Engineering](Context_Engineering) | Context engineering practice — how what goes into the window shapes what comes back | [ContextEngineering](https://github.com/alexisinwork/ContextEngineering) |
 | [CustomerSupport](CustomerSupport) | Vercel AI SDK practice — scaffolding only so far | [customer_support](https://github.com/alexisinwork/customer_support) |
+| [ModelContextProtocol](ModelContextProtocol) | MCP practice — building servers, and what tools and resources look like on the wire | [MCP](https://github.com/alexisinwork/MCP) |
 
 `PopChoice` and `OllamaPracticeMistral` live directly in this repo rather than
 in their own — no submodule, nothing to clone separately.

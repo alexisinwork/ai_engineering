@@ -25,3 +25,6 @@
 [submodule "CustomerSupport"]
 	path = CustomerSupport
 	url = https://github.com/alexisinwork/customer_support.git
+[submodule "ModelContextProtocol"]
+	path = ModelContextProtocol
+	url = https://github.com/alexisinwork/MCP.git

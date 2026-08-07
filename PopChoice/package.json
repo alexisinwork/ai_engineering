@@ -1,6 +1,6 @@
 {
   "name": "popchoice",
-  "description": "Movie recommender over a vector database — Scrimba AI Engineer path solo project",
+  "description": "Movie recommender over a vector database",
   "type": "module",
   "scripts": {
     "start": "vite",

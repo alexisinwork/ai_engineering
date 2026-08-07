@@ -9,13 +9,6 @@ tokens and prompt injection, on-device inference, embeddings and retrieval,
 rank fusion and group recommendation, and how local models compare to hosted
 APIs. They cross-reference each other, so any one of them is a reasonable place
 to start.
-
-[`AI_APP_ENGINEERING.md`](AI_APP_ENGINEERING.md) is the cross-cutting one: the
-discipline these projects share, distilled to be portable to any AI codebase —
-why AI pipelines fail plausibly rather than loudly, calibrating a threshold
-instead of guessing it, deriving chunk size from the data, and what separates
-an eval you can trust from one that flatters you.
-
 ## Projects
 
 | Project | Description | Repo |

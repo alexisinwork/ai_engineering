@@ -1,6 +1,6 @@
 {
   "name": "Scrim-s06c53f",
-  "description": "https://scrimba.com/the-ai-engineer-path-c02v/~07uj",
+  "description": "Express server querying a local Mistral through Ollama",
   "type": "module",
   "scripts": {
     "start": "node index.js",

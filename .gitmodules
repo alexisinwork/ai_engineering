@@ -22,3 +22,6 @@
 [submodule "Context_Engineering"]
 	path = Context_Engineering
 	url = https://github.com/alexisinwork/ContextEngineering.git
+[submodule "CustomerSupport"]
+	path = CustomerSupport
+	url = https://github.com/alexisinwork/customer_support.git

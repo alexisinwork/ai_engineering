@@ -24,6 +24,7 @@ to start.
 | [OllamaPracticeMistral](OllamaPracticeMistral) | Express server querying a local Mistral through Ollama | in this repo |
 | [AI_Agents](AI_Agents) | AI agents practice — weather lookup and localized activity suggestions | [ai_agents](https://github.com/alexisinwork/ai_agents) |
 | [Context_Engineering](Context_Engineering) | Context engineering practice — how what goes into the window shapes what comes back | [ContextEngineering](https://github.com/alexisinwork/ContextEngineering) |
+| [CustomerSupport](CustomerSupport) | AI customer support — scaffolding only so far | [customer_support](https://github.com/alexisinwork/customer_support) |
 
 `PopChoice` and `OllamaPracticeMistral` live directly in this repo rather than
 in their own — no submodule, nothing to clone separately.
